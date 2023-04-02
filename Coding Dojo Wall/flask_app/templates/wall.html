@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dojo Wall</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body class="bg-light text-dark">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">Coding Dojo Wall</a>
+          <div class="d-flex col-6 justify-content-around">
+              <h3 class="text-center">Welcome {{user.first_name}}</h3>
+              <a href="/logout" class="btn btn-info">Logout</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+      <div class="container">
+        <h4>Whats on your mind? Create a new post...</h4>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <div class="error" role="alert">
+                  {% for message in messages %}
+                  <p class="text-danger">{{message}}</p>
+                  {% endfor %}
+          </div>
+          {% endif %}
+        {% endwith %}
+
+        <form action="/posts" method="post">
+          <textarea name="content" id="" cols="100" rows="5" placeholder="Enter your post"></textarea>
+          <input type="hidden" name="user_id" value="{{user.id}}">
+          <input class="btn btn-primary" type="submit" value="Publish">
+        </form>
+        <hr>
+        <h3>All Community Posts:</h3>
+        {% for post in posts: %}
+        <p><em>{{post.user.first_name}} {{post.user.last_name}} posted on - {{post.created_at.strftime("%b %d at %I:%M %p")}}:</em></p>
+           <p>{{post.content}}</p>
+
+            {% if post.user.id == user.id: %}
+            <a href="/posts/delete/{{post.id}}" class="btn btn-danger">delete</a>
+            {% endif %}
+            <hr>
+        {% endfor %}
+      </div>
+
+
+</body>
+</html>
